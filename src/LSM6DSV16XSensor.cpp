@@ -53,8 +53,13 @@ LSM6DSV16XSensor::LSM6DSV16XSensor(TwoWire *i2c, uint8_t address) : dev_i2c(i2c)
   reg_ctx.mdelay = LSM6DSV16X_sleep;
   reg_ctx.handle = (void *)this;
   dev_spi = NULL;
+#if defined(I3C_SUPPORTED)
+  dev_i3c = NULL;
+#endif
+  bus_type = LSM6DSV16X_I2C_BUS;
   acc_is_enabled = 0L;
   gyro_is_enabled = 0L;
+  initialized = 0U;
 }
 
 /** Constructor
@@ -69,8 +74,60 @@ LSM6DSV16XSensor::LSM6DSV16XSensor(SPIClass *spi, int cs_pin, uint32_t spi_speed
   reg_ctx.mdelay = LSM6DSV16X_sleep;
   reg_ctx.handle = (void *)this;
   dev_i2c = NULL;
+#if defined(I3C_SUPPORTED)
+  dev_i3c = NULL;
+#endif
+  bus_type = LSM6DSV16X_SPI_4WIRES_BUS;
+  address = 0U;
   acc_is_enabled = 0L;
   gyro_is_enabled = 0L;
+  initialized = 0U;
+}
+
+#if defined(I3C_SUPPORTED)
+LSM6DSV16XSensor::LSM6DSV16XSensor(I3CBus *i3c, uint8_t staticAddr7, uint8_t dynAddr7)
+{
+  reg_ctx.write_reg = LSM6DSV16X_io_write;
+  reg_ctx.read_reg = LSM6DSV16X_io_read;
+  reg_ctx.mdelay = LSM6DSV16X_sleep;
+  reg_ctx.handle = (void *)this;
+
+  dev_i2c = NULL;
+  dev_spi = NULL;
+  dev_i3c = i3c;
+
+  address = (dynAddr7 != 0U) ? dynAddr7 : staticAddr7;
+  i3c_static7 = staticAddr7;
+  i3c_dyn7 = dynAddr7;
+
+  bus_type = LSM6DSV16X_I3C_BUS;
+  acc_is_enabled = 0L;
+  gyro_is_enabled = 0L;
+  initialized = 0U;
+}
+
+uint8_t LSM6DSV16XSensor::getStaticAddress() const
+{
+  return i3c_static7;
+}
+
+uint8_t LSM6DSV16XSensor::getDynAddress() const
+{
+  return i3c_dyn7;
+}
+#endif
+
+LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::set_address(uint8_t dynAddr7)
+{
+  if (initialized) {
+    return LSM6DSV16X_ERROR;
+  }
+
+  address = dynAddr7;
+#if defined(I3C_SUPPORTED)
+  i3c_dyn7 = dynAddr7;
+#endif
+  return LSM6DSV16X_OK;
 }
 
 /**
@@ -80,12 +137,24 @@ LSM6DSV16XSensor::LSM6DSV16XSensor(SPIClass *spi, int cs_pin, uint32_t spi_speed
 LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::begin()
 {
   int32_t fs = 0;
+  uint8_t id = 0;
 
   if (dev_spi) {
     // Configure CS pin
     pinMode(cs_pin, OUTPUT);
     digitalWrite(cs_pin, HIGH);
   }
+
+#if defined(I3C_SUPPORTED)
+  if (dev_i3c != NULL) {
+    if (address < 0x08U || address > 0x77U) {
+      return LSM6DSV16X_ERROR;
+    }
+    if (ReadID(&id) != LSM6DSV16X_OK || id != LSM6DSV16X_ID) {
+      return LSM6DSV16X_ERROR;
+    }
+  }
+#endif
 
   /* Enable register address automatically incremented during a multiple byte
   access with a serial interface. */

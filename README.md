@@ -3,7 +3,7 @@ Arduino library to support the LSM6DSV16X 3D accelerometer and 3D gyroscope
 
 ## API
 
-This sensor uses I2C or SPI to communicate.
+This sensor uses I2C, I3C or SPI to communicate.
 For I2C it is then required to create a TwoWire interface before accessing to the sensors:  
 
     TwoWire dev_i2c(I2C_SDA, I2C_SCL);  
@@ -13,6 +13,10 @@ For SPI it is then required to create a SPI interface before accessing to the se
 
     SPIClass dev_spi(SPI_MOSI, SPI_MISO, SPI_SCK);  
     dev_spi.begin();
+
+For I3C it is then required to create an I3C interface before accessing to the sensors:
+
+    I3C.begin(I3C_SDA, I3C_SCL, 1000000U);
 
 An instance can be created and enabled when the I2C bus is used following the procedure below:  
 
@@ -26,6 +30,16 @@ An instance can be created and enabled when the SPI bus is used following the pr
     LSM6DSV16XSensor AccGyr(&dev_spi, CS_PIN);
     AccGyr.begin();	
     AccGyr.Enable_X();  
+    AccGyr.Enable_G();
+
+An instance can be created and enabled when the I3C bus is used following the procedure below:
+
+    LSM6DSV16XSensor AccGyr(&I3C, LSM6DSV16X_I3C_ADD_H, 0x30);
+    I3C.resetDynamicAddresses();
+    I3C.assignDynamicAddress(AccGyr.getStaticAddress(), AccGyr.getDynAddress());
+    AccGyr.begin();
+    I3C.setClock(12500000);
+    AccGyr.Enable_X();
     AccGyr.Enable_G();
 
 The access to the sensor values is done as explained below:  
@@ -42,6 +56,10 @@ The access to the sensor values is done as explained below:
 * LSM6DSV16X_DataLog_Terminal: This application shows how to get data from LSM6DSV16X accelerometer and gyroscope and print them on terminal.
 
 * LSM6DSV16X_6D_Orientation: This application shows how to use LSM6DSV16X accelerometer to find out the 6D orientation and display data on a hyperterminal.
+
+* LSM6DSV16X_I3C_Basic: This application shows how to use LSM6DSV16X accelerometer and gyroscope over I3C using SETDASA.
+
+* LSM6DSV16X_I3C_DynAddrAssign: This application shows how to discover and use LSM6DSV16X dynamic address over I3C.
 
 * LSM6DSV16X_Double_Tap_Detection: This application shows how to detect the double tap event using the LSM6DSV16X accelerometer.
 

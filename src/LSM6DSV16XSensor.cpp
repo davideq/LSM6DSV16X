@@ -133,36 +133,22 @@ LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::begin(uint8_t new_address)
   }
 #if defined(I3C_SUPPORTED)
   if (dev_i3c != nullptr) {
-    Serial.println("dev_i3c != nullptr");
     if (new_address < 0x08 || new_address > 0x77) {
-                Serial.println("addres not ok");
-
       return LSM6DSV16X_ERROR;
     } else {
-          Serial.println("addres ok");
-
       address = new_address;
       i3c_dyn7 = new_address;
     }
     uint8_t id = 0;
     if (ReadID(&id) != LSM6DSV16X_OK || id != LSM6DSV16X_ID) {
-                Serial.println("id non ok");
-                Serial.println(id);
-                                Serial.println(LSM6DSV16X_ID);
-
-
       return LSM6DSV16X_ERROR;
     }
-              Serial.println("id ok");
-
   }
 #endif
 
   /* Enable register address automatically incremented during a multiple byte
   access with a serial interface. */
   if (lsm6dsv16x_auto_increment_set(&reg_ctx, PROPERTY_ENABLE) != LSM6DSV16X_OK) {
-                    Serial.println("AI no ok" );
-
     return LSM6DSV16X_ERROR;
   }
 
@@ -1447,7 +1433,7 @@ LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::Enable_Wake_Up_Detection(LSM6DSV16X_Se
     return LSM6DSV16X_ERROR;
   }
 
-  /* Set wake-up durantion */
+  /* Set wake-up duration */
   if (Set_Wake_Up_Duration(0) != LSM6DSV16X_OK) {
     return LSM6DSV16X_ERROR;
   }
@@ -1542,7 +1528,7 @@ LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::Disable_Wake_Up_Detection()
     return LSM6DSV16X_ERROR;
   }
 
-  /* Reset wake-up durantion */
+  /* Reset wake-up duration */
   if (Set_Wake_Up_Duration(0) != LSM6DSV16X_OK) {
     return LSM6DSV16X_ERROR;
   }

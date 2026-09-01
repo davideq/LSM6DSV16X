@@ -19,7 +19,6 @@ LSM6DSV16X_GYRO_Operating_Mode_t	KEYWORD1
 begin	KEYWORD2
 end	KEYWORD2
 ReadID	KEYWORD2
-set_address	KEYWORD2
 getStaticAddress	KEYWORD2
 getDynAddress	KEYWORD2
 Enable_X	KEYWORD2

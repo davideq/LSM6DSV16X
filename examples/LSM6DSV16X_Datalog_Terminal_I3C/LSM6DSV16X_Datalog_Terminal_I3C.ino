@@ -1,14 +1,31 @@
-#include "I3C.h"
+/*
+   @file    LSM6DSV16X_DataLog_Terminal_I3C.ino
+   @author  STMicroelectronics
+   @brief   Example to use the LSM6DSV16X sensor with I3C and SETDASA command
+ *******************************************************************************
+   Copyright (c) 2026, STMicroelectronics
+   All rights reserved.
+
+   This software component is licensed by ST under BSD 3-Clause license,
+   the "License"; You may not use this file except in compliance with the
+   License. You may obtain a copy of the License at:
+                          opensource.org/licenses/BSD-3-Clause
+
+ *******************************************************************************
+*/
 #include "LSM6DSV16XSensor.h"
 
-LSM6DSV16XSensor sensor(&I3C);
+#define LSM6DSV16X_DYNAMIC_ADDRESS 0x30
 
-void setup() {
+LSM6DSV16XSensor sensor(&I3C, LSM6DSV16X_I3C_ADD_H);
+
+void setup()
+{
   Serial.begin(115200);
   while (!Serial) {}
   delay(1000);
 
-  Serial.println("=== LSM6DSV16X DAA ===");
+  Serial.println("=== LSM6DSV16X SETDASA ===");
 
   if (!I3C.begin(I3C_SDA, I3C_SCL, 1000000U)) {
     Serial.println("begin() failed");
@@ -20,44 +37,12 @@ void setup() {
     while (1) {}
   }
 
-  I3CDiscoveredDevice devices[8] = {};
-  size_t found = 0;
-
-  if (I3C.discover(devices, 8, &found)) {
-    Serial.println("discover() failed");
+  if (!I3C.assignDynamicAddress(sensor.getStaticAddress(), LSM6DSV16X_DYNAMIC_ADDRESS)) {
+    Serial.println("assignDynamicAddress() failed");
     while (1) {}
   }
 
-  Serial.print("Devices found: ");
-  Serial.println(found);
-
-  uint8_t lsmDynAddr = 0U;
-
-  for (size_t i = 0; i < found; ++i) {
-    Serial.print("[");
-    Serial.print(i);
-    Serial.print("] PID=0x");
-    Serial.print((uint32_t)(devices[i].pid >> 32), HEX);
-    Serial.print((uint32_t)(devices[i].pid & 0xFFFFFFFFULL), HEX);
-    Serial.print(" DYN=0x");
-    Serial.println(devices[i].dynAddr, HEX);
-
-    if ((devices[i].pid == LSM6DSV16X_I3C_PID_H) || (devices[i].pid == LSM6DSV16X_I3C_PID_L)) {
-      lsmDynAddr = devices[i].dynAddr;
-    }
-  }
-
-  if (lsmDynAddr == 0U) {
-    Serial.println("Sensor not found");
-    while (1) {}
-  }
-
-  if (sensor.set_address(lsmDynAddr) != LSM6DSV16X_OK) {
-    Serial.println("set_address() failed");
-    while (1) {}
-  }
-
-  if (sensor.begin() != LSM6DSV16X_OK) {
+  if (sensor.begin(LSM6DSV16X_DYNAMIC_ADDRESS) != LSM6DSV16X_OK) {
     Serial.println("sensor.begin() failed");
     while (1) {}
   }
@@ -80,7 +65,8 @@ void setup() {
   Serial.println("LSM6DSV16X ready");
 }
 
-void loop() {
+void loop()
+{
   int32_t accel[3] = {0};
   int32_t angrate[3] = {0};
 

@@ -2,13 +2,13 @@
  ******************************************************************************
  * @file    LSM6DSV16XSensor.cpp
  * @author  STMicroelectronics
- * @version V1.0.0
- * @date    July 2022
+ * @version V1.1.0
+ * @date    September 2026
  * @brief   Implementation of a LSM6DSV16X inertial measurement sensor.
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2022 STMicroelectronics</center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2026 STMicroelectronics</center></h2>
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -85,7 +85,7 @@ LSM6DSV16XSensor::LSM6DSV16XSensor(SPIClass *spi, int cs_pin, uint32_t spi_speed
 }
 
 #if defined(I3C_SUPPORTED)
-LSM6DSV16XSensor::LSM6DSV16XSensor(I3CBus *i3c, uint8_t staticAddr7, uint8_t dynAddr7)
+LSM6DSV16XSensor::LSM6DSV16XSensor(I3CBus *i3c, uint8_t static_addr7)
 {
   reg_ctx.write_reg = LSM6DSV16X_io_write;
   reg_ctx.read_reg = LSM6DSV16X_io_read;
@@ -96,9 +96,9 @@ LSM6DSV16XSensor::LSM6DSV16XSensor(I3CBus *i3c, uint8_t staticAddr7, uint8_t dyn
   dev_spi = NULL;
   dev_i3c = i3c;
 
-  address = (dynAddr7 != 0U) ? dynAddr7 : staticAddr7;
-  i3c_static7 = staticAddr7;
-  i3c_dyn7 = dynAddr7;
+  address = static_addr7;
+  i3c_static7 = static_addr7;
+  i3c_dyn7 = 0;
 
   bus_type = LSM6DSV16X_I3C_BUS;
   acc_is_enabled = 0L;
@@ -117,24 +117,11 @@ uint8_t LSM6DSV16XSensor::getDynAddress() const
 }
 #endif
 
-LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::set_address(uint8_t dynAddr7)
-{
-  if (initialized) {
-    return LSM6DSV16X_ERROR;
-  }
-
-  address = dynAddr7;
-#if defined(I3C_SUPPORTED)
-  i3c_dyn7 = dynAddr7;
-#endif
-  return LSM6DSV16X_OK;
-}
-
 /**
  * @brief  Initialize the LSM6DSV16X sensor
  * @retval 0 in case of success, an error code otherwise
  */
-LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::begin()
+LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::begin(uint8_t new_address)
 {
   int32_t fs = 0;
   uint8_t id = 0;
@@ -144,21 +131,38 @@ LSM6DSV16XStatusTypeDef LSM6DSV16XSensor::begin()
     pinMode(cs_pin, OUTPUT);
     digitalWrite(cs_pin, HIGH);
   }
-
 #if defined(I3C_SUPPORTED)
-  if (dev_i3c != NULL) {
-    if (address < 0x08U || address > 0x77U) {
+  if (dev_i3c != nullptr) {
+    Serial.println("dev_i3c != nullptr");
+    if (new_address < 0x08 || new_address > 0x77) {
+                Serial.println("addres not ok");
+
       return LSM6DSV16X_ERROR;
+    } else {
+          Serial.println("addres ok");
+
+      address = new_address;
+      i3c_dyn7 = new_address;
     }
+    uint8_t id = 0;
     if (ReadID(&id) != LSM6DSV16X_OK || id != LSM6DSV16X_ID) {
+                Serial.println("id non ok");
+                Serial.println(id);
+                                Serial.println(LSM6DSV16X_ID);
+
+
       return LSM6DSV16X_ERROR;
     }
+              Serial.println("id ok");
+
   }
 #endif
 
   /* Enable register address automatically incremented during a multiple byte
   access with a serial interface. */
   if (lsm6dsv16x_auto_increment_set(&reg_ctx, PROPERTY_ENABLE) != LSM6DSV16X_OK) {
+                    Serial.println("AI no ok" );
+
     return LSM6DSV16X_ERROR;
   }
 

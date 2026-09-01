@@ -2,13 +2,13 @@
  ******************************************************************************
  * @file    LSM6DSV16XSensor.h
  * @author  STMicroelectronics
- * @version V1.0.0
- * @date    July 2022
+ * @version V1.1.0
+ * @date    September 2026
  * @brief   Abstract Class of a LSM6DSV16X inertial measurement sensor.
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2022 STMicroelectronics</center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2026 STMicroelectronics</center></h2>
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -164,19 +164,18 @@ class LSM6DSV16XSensor {
   public:
     LSM6DSV16XSensor(TwoWire *i2c, uint8_t address = LSM6DSV16X_I2C_ADD_H);
     LSM6DSV16XSensor(SPIClass *spi, int cs_pin, uint32_t spi_speed = 2000000);
-  #if defined(I3C_SUPPORTED)
-    LSM6DSV16XSensor(I3CBus *i3c, uint8_t staticAddr7 = 0, uint8_t dynAddr7 = 0);
-  #endif
+#if defined(I3C_SUPPORTED)
+    LSM6DSV16XSensor(I3CBus *i3c, uint8_t static_addr7 = 0);
+#endif
 
-    LSM6DSV16XStatusTypeDef begin();
+    LSM6DSV16XStatusTypeDef begin(uint8_t new_address = 0);
     LSM6DSV16XStatusTypeDef end();
     LSM6DSV16XStatusTypeDef ReadID(uint8_t *Id);
-    LSM6DSV16XStatusTypeDef set_address(uint8_t dynAddr7);
 
-  #if defined(I3C_SUPPORTED)
+#if defined(I3C_SUPPORTED)
     uint8_t getStaticAddress() const;
     uint8_t getDynAddress() const;
-  #endif
+#endif
 
     LSM6DSV16XStatusTypeDef Enable_X();
     LSM6DSV16XStatusTypeDef Disable_X();
@@ -430,9 +429,9 @@ class LSM6DSV16XSensor {
     /* Helper classes. */
     TwoWire *dev_i2c;
     SPIClass *dev_spi;
-  #if defined(I3C_SUPPORTED)
+#if defined(I3C_SUPPORTED)
     I3CBus *dev_i3c;
-  #endif
+#endif
 
     uint32_t bus_type; /*0 means I2C, 1 means SPI 4-Wires, 2 means SPI-3-Wires, 3 means I3C */
 
@@ -441,10 +440,10 @@ class LSM6DSV16XSensor {
     int cs_pin;
     uint32_t spi_speed;
 
-  #if defined(I3C_SUPPORTED)
+#if defined(I3C_SUPPORTED)
     uint8_t i3c_static7;
     uint8_t i3c_dyn7;
-  #endif
+#endif
 
     lsm6dsv16x_data_rate_t acc_odr;
     lsm6dsv16x_data_rate_t gyro_odr;

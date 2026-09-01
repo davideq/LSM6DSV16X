@@ -61,12 +61,7 @@ void setup()
     while (1) {}
   }
 
-  if (sensor.set_address(lsmDynAddr) != LSM6DSV16X_OK) {
-    Serial.println("set_address() failed");
-    while (1) {}
-  }
-
-  if (sensor.begin() != LSM6DSV16X_OK) {
+  if (sensor.begin(lsmDynAddr) != LSM6DSV16X_OK) {
     Serial.println("sensor.begin() failed");
     while (1) {}
   }

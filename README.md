@@ -64,13 +64,13 @@ The access to the sensor values is done as explained below:
 
 ## Examples
 
-* LSM6DSV16X_DataLog_Terminal: This application shows how to get data from LSM6DSV16X accelerometer and gyroscope and print them on terminal.
+* LSM6DSV16X_DataLog_Terminal_I2C: This application shows how to get data from LSM6DSV16X accelerometer and gyroscope and print them on terminal over I2C.
 
 * LSM6DSV16X_6D_Orientation: This application shows how to use LSM6DSV16X accelerometer to find out the 6D orientation and display data on a hyperterminal.
 
-* LSM6DSV16X_I3C_Basic: This application shows how to use LSM6DSV16X accelerometer and gyroscope over I3C using SETDASA.
+* LSM6DSV16X_Datalog_Terminal_I3C: This application shows how to use LSM6DSV16X accelerometer and gyroscope over I3C using SETDASA.
 
-* LSM6DSV16X_I3C_DynAddrAssign: This application shows how to discover and use LSM6DSV16X dynamic address over I3C.
+* LSM6DSV16X_Datalog_Terminal_I3C_ENTDAA: This application shows how to discover and use LSM6DSV16X dynamic address over I3C.
 
 * LSM6DSV16X_Double_Tap_Detection: This application shows how to detect the double tap event using the LSM6DSV16X accelerometer.
 

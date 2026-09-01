@@ -66,33 +66,33 @@ The access to the sensor values is done as explained below:
 
 * LSM6DSV16X_DataLog_Terminal_I2C: This application shows how to get data from LSM6DSV16X accelerometer and gyroscope and print them on terminal over I2C.
 
-* LSM6DSV16X_6D_Orientation: This application shows how to use LSM6DSV16X accelerometer to find out the 6D orientation and display data on a hyperterminal.
+* LSM6DSV16X_6D_Orientation_I2C: This application shows how to use LSM6DSV16X accelerometer to find out the 6D orientation and display data on a hyperterminal over I2C.
 
 * LSM6DSV16X_Datalog_Terminal_I3C: This application shows how to use LSM6DSV16X accelerometer and gyroscope over I3C using SETDASA.
 
 * LSM6DSV16X_Datalog_Terminal_I3C_ENTDAA: This application shows how to discover and use LSM6DSV16X dynamic address over I3C.
 
-* LSM6DSV16X_Double_Tap_Detection: This application shows how to detect the double tap event using the LSM6DSV16X accelerometer.
+* LSM6DSV16X_Double_Tap_Detection_I2C: This application shows how to detect the double tap event using the LSM6DSV16X accelerometer over I2C.
 
-* LSM6DSV16X_Free_Fall_Detection: This application shows how to detect the free fall event using the LSM6DSV16X accelerometer.
+* LSM6DSV16X_Free_Fall_Detection_I2C: This application shows how to detect the free fall event using the LSM6DSV16X accelerometer over I2C.
 
-* LSM6DSV16X_MLC: This application shows how to detect the activity using the LSM6DSV16X Machine Learning Core.
+* LSM6DSV16X_MLC_I2C: This application shows how to detect the activity using the LSM6DSV16X Machine Learning Core over I2C.
 
-* LSM6DSV16X_Pedometer: This application shows how to use LSM6DSV16X accelerometer to count steps.
+* LSM6DSV16X_Pedometer_I2C: This application shows how to use LSM6DSV16X accelerometer to count steps over I2C.
 
-* LSM6DSV16X_Qvar_Polling: This application shows how to use LSM6DSV16X Qvar features in polling mode.
+* LSM6DSV16X_Qvar_Polling_I2C: This application shows how to use LSM6DSV16X Qvar features in polling mode over I2C.
 
-* LSM6DSV16X_Sensor_Fusion: This application shows how to use LSM6DSV16X Sensor Fusion features for reading quaternions.
+* LSM6DSV16X_Sensor_Fusion_I2C: This application shows how to use LSM6DSV16X Sensor Fusion features for reading quaternions over I2C.
 
-* LSM6DSV16X_Single_Tap_Detection: This application shows how to detect the single tap event using the LSM6DSV16X accelerometer.
+* LSM6DSV16X_Single_Tap_Detection_I2C: This application shows how to detect the single tap event using the LSM6DSV16X accelerometer over I2C.
 
-* LSM6DSV16X_Tilt_Detection: This application shows how to detect the tilt event using the LSM6DSV16X accelerometer.
+* LSM6DSV16X_Tilt_Detection_I2C: This application shows how to detect the tilt event using the LSM6DSV16X accelerometer over I2C.
 
-* LSM6DSV16X_Wake_Up_Detection: This application shows how to detect the wake-up event using the LSM6DSV16X accelerometer.
+* LSM6DSV16X_Wake_Up_Detection_I2C: This application shows how to detect the wake-up event using the LSM6DSV16X accelerometer over I2C.
 
-* LSM6DSV16X_FIFO_Polling: This application shows how to get accelerometer and gyroscope data from FIFO in pooling mode and print them on terminal.
+* LSM6DSV16X_FIFO_Polling_I2C: This application shows how to get accelerometer and gyroscope data from FIFO in pooling mode and print them on terminal over I2C.
 
-* LSM6DSV16X_FIFO_Interrupt: This application shows how to get accelerometer and gyroscope data from FIFO using interrupt and print them on terminal.
+* LSM6DSV16X_FIFO_Interrupt_I2C: This application shows how to get accelerometer and gyroscope data from FIFO using interrupt and print them on terminal over I2C.
 ## Documentation
 
 You can find the source files at  

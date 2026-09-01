@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    LSM6DSV16XSensor.h
  * @author  STMicroelectronics
- * @version V2.2.0
+ * @version V2.1.0
  * @date    September 2026
  * @brief   Abstract Class of a LSM6DSV16X inertial measurement sensor.
  ******************************************************************************

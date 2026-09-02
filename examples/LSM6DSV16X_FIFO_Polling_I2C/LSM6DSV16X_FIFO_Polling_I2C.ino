@@ -1,5 +1,5 @@
 /*
-   @file    STEVAL_MEMS_FIFO_Interrupt.ino
+   @file    LSM6DSV16X_FIFO_Polling_I2C.ino
    @author  STMicroelectronics
    @brief   Example to use the LSM6DSV16X library with FIFO status interrupts.
  *******************************************************************************
